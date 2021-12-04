@@ -37,7 +37,7 @@ export default class UserCrud extends Component {
         //é a função que recebe url e user como parametro
         axios[method](url, user)
             .then(resp => {
-                const list = this.updateField(resp.data)
+                const list = this.getUpdatedList(resp.data)
                 this.setState({user: initialState.user, list})
             })
     }
@@ -99,7 +99,7 @@ export default class UserCrud extends Component {
 
     remove(user){
         axios.delete(`${baseUrl}/${user.id}`).then(resp => {
-            const list = this.updateField(user, false)
+            const list = this.getUpdatedList(user, false)
             this.setState({list})
         })
     }
@@ -142,6 +142,12 @@ export default class UserCrud extends Component {
                 </tr>
             )
         })
+    }
+
+    getUpdatedList(user, add = true) {
+        const list = this.state.list.filter(u => u.id !== user.id)
+        if(add) list.unshift(user)
+        return list
     }
 
     updateField(event){
